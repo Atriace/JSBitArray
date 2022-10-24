@@ -1,0 +1,159 @@
+/* 	HTML Reset */
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+blockquote:before, blockquote:after, q:before, q:after {
+	content: '';
+	content: none;
+}
+
+/* 	Site Styling */
+
+* {
+	display: block;
+	transition: box-shadow 0.15s, background 0.15s, top 0.15s, height 0.25s;
+}
+
+body {
+	background-color: #eff1f3;
+	overflow: hidden;
+	font-size: 10pt;
+	padding: 2em;
+}
+
+h1 {
+	font-family: system-ui, sans-serif;
+	font-size: 3em;
+	font-weight: 100;
+	margin-bottom: 0.5em;
+	color: #025259;
+}
+
+h2 {
+    width: 100%;
+	font-family: system-ui, sans-serif;
+	font-size: 2em;
+}
+
+h3 {
+    width: 100%;
+	font-family: system-ui, sans-serif;
+	font-size: 1.2em;
+	font-weight: 700;
+    margin-top: 1.5em;
+	margin-bottom: 0.5em;
+}
+
+div {
+    font-family: "Consolas", sans-serif;
+	white-space: pre;
+}
+
+benchmarks {
+	display: inline-block;
+    height: 85%;
+    margin-right: 0.5em;
+    vertical-align: top;
+}
+
+benchmark {
+	display: inline-block;
+	vertical-align: top;
+	background: #f9fafb;
+	width: auto;
+	height: 300px;
+	border: 1px solid #d9d9d9;
+	padding-left: 1em;
+	padding-top: 1em;
+	padding-bottom: 1em;
+	margin: 0.5em;
+}
+
+validation {
+    display: inline-block;
+    margin-right: 1em;
+    vertical-align: top;
+    height: 85%;
+}
+
+test {
+    width: 70px;
+	height: 65%;
+    margin-right: 1px;
+    display: inline-block;
+}
+
+label {
+	font-family: system-ui, sans-serif;
+	font-size: 1.0em;
+    font-weight: 600;
+}
+
+time {
+	font-family: "Consolas", sans-serif;
+	font-size: 1em;
+	color: gray;
+}
+
+bar {
+	display: flex;
+	align-items: flex-end;
+	background: #d6dbe0;
+	width: 100%;
+    height: 100%;
+}
+
+fill {
+	width: 100%;
+}
+
+pass {
+    font-size: 0.8em;
+    color: #4ea34e;
+    background: #a5eaa5;
+    padding: 0.25em 0.75em;
+    border-radius: 0.75em;
+    margin-bottom: 1px;
+    display: inline-block;
+}
+
+fail {
+    font-size: 0.8em;
+    color: #a34e4e;
+    background: #eaa5a5a6;
+    padding: 0.25em 0.75em;
+    border-radius: 0.75em;
+    margin-bottom: 1px;
+    display: inline-block;
+}
+
+/* Teals */
+
+.c0 {
+	background-color: #025259;
+}
+
+.c1 {
+	background-color: #038F9C;
+}
+
+.c2 {
+	background-color: #04B2C2;
+}
+
+.c3 {
+	background-color: #04C9DB;
+}
+
+.c4 {
+	background-color: #039caa;
+}
