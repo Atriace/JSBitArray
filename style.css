@@ -25,7 +25,6 @@ blockquote:before, blockquote:after, q:before, q:after {
 
 body {
 	background-color: #eff1f3;
-	overflow: hidden;
 	font-size: 10pt;
 	padding: 2em;
 }
@@ -53,6 +52,13 @@ h3 {
 	margin-bottom: 0.5em;
 }
 
+h4 {
+    font-family: system-ui, sans-serif;
+    font-weight: 700;
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+}
+
 div {
     font-family: "Consolas", sans-serif;
 	white-space: pre;
@@ -70,11 +76,9 @@ benchmark {
 	vertical-align: top;
 	background: #f9fafb;
 	width: auto;
-	height: 300px;
+	height: 340px;
 	border: 1px solid #d9d9d9;
-	padding-left: 1em;
-	padding-top: 1em;
-	padding-bottom: 1em;
+	padding: 1em;
 	margin: 0.5em;
 }
 
@@ -96,12 +100,20 @@ label {
 	font-family: system-ui, sans-serif;
 	font-size: 1.0em;
     font-weight: 600;
+    padding: 0.25em 0.5em;
+
+    /*background: #eff1f3;*/
+    /*color: #014046;*/
+    background: #1d4d54db;
+   	color: white;
+    margin-bottom: 0.5em;
 }
 
 time {
 	font-family: "Consolas", sans-serif;
 	font-size: 1em;
 	color: gray;
+    padding: 0em 0.5em;
 }
 
 bar {
@@ -131,29 +143,113 @@ fail {
     color: #a34e4e;
     background: #eaa5a5a6;
     padding: 0.25em 0.75em;
-    border-radius: 0.75em;
+    border-top-left-radius: 0.75em;
+    border-top-right-radius: 0.75em;
     margin-bottom: 1px;
     display: inline-block;
+
+}
+
+.fail {
+	color: #a34e4e;
+    background: #efc2c3;
+    margin-top: -1px;
+    margin-left: -1.1em;
+    margin-bottom: 1px;
+    border-top-left-radius: 0em;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0.75em;
+    border-bottom-left-radius: 0em;
 }
 
 /* Teals */
 
-.c0 {
+.c0, .c1, .c2, .c3, .c4 {
+	background: gray;
+}
+
+.teal .c0 {
 	background-color: #025259;
 }
 
-.c1 {
+.teal .c1 {
 	background-color: #038F9C;
 }
 
-.c2 {
+.teal .c2 {
 	background-color: #04B2C2;
 }
 
-.c3 {
+.teal .c3 {
 	background-color: #04C9DB;
 }
 
-.c4 {
+.teal .c4 {
 	background-color: #039caa;
+}
+
+/* Oranges  */
+
+.orange .c0 {
+	background-color: #9C3803;
+}
+
+.orange .c1 {
+	background-color: #C24604;
+}
+
+.orange .c2 {
+	background-color: #D94F04;
+}
+
+.orange .c3 {
+	background-color: #E85405;
+}
+
+.orange .c4 {
+	background-color: #E65400;
+}
+
+/* Greens */
+
+.green .c0 {
+	background-color: #018003;
+}
+
+.green .c1 {
+	background-color: #439C35;
+}
+
+.green .c2 {
+	background-color: #53C242;
+}
+
+.green .c3 {
+	background-color: #5EDB4B;
+}
+
+.green .c4 {
+	background-color: #63E84F;
+}
+
+/* Reds  */
+
+.red .c0 {
+	background-color: #8C1F28;
+}
+
+.red .c1 {
+	background-color: #9C222C;
+}
+
+.red .c2 {
+	background-color: #C22B37;
+}
+
+.red .c3 {
+	background-color: #DB303F;
+}
+
+.red .c3 {
+	background-color: #FF4041;
 }

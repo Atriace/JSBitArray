@@ -20,7 +20,7 @@ export default class BitArray extends DataView {
 		} else if (Number.isInteger(sizeOrBuffer)) {
 			if (sizeOrBuffer > 1.5e10) { throw new Error("BitArray size can not exceed 1.5e10"); }
 			len = sizeOrBuffer;
-			super(new ArrayBuffer(Math.ceil(sizeOrBuffer/8)));
+			super(new ArrayBuffer(Math.ceil(len / byteSize) * byteSize)); // Must be multiples of the byteSize
 		} else {
 			throw new Error("A size or buffer must be provided when initalizing a BitArray");
 		}
@@ -71,11 +71,13 @@ export default class BitArray extends DataView {
 	}
 
 	getIndex(i) {
-		return this.#getter(i >> this.#shiftAmount * this.#bytesPerIndex);
+		let offset = i >> this.#shiftAmount * this.#bytesPerIndex;
+		return this.#getter(offset);
 	}
 
 	setIndex(i, v) {
-		this.#setter(i >> this.#shiftAmount * this.#bytesPerIndex, v);
+		let offset = i >> this.#shiftAmount * this.#bytesPerIndex;
+		this.#setter(offset, v);
 	}
 
 	at(i) {

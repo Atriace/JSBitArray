@@ -32,81 +32,80 @@ function registerClass(className, moduleRef) {
 	}
 }
 
-function generateHTML(info, validation, benchmarks) {
-	let pre  = `<benchmark><h2>${info.name}</h2><validation><h3>Validation:</h3>`;
+var colors = [1, "green", "teal", "orange", "red"]
+
+function generateHTML(info, validation, benchmarks, maxTime) {
+	let pre  = `<benchmark class='${colors[colors[0]]}'><h2>${info.name}</h2><validation><h3>Validation:</h3>`;
 	let sep = ":";
 	let validations = [];
 	for (let name in validation) {
-		validations.push(`<div>${name}${sep.padEnd(6-name.length, " ")}${validation[name][0]}${"".padEnd(9-validation[name][0].length, " ")}${validation[name][0] == validation[name][1] ? "<pass>PASSED</pass>" : "<fail>FAILED</fail>"}</div>`);
+		validations.push(`<div>${name}${sep.padEnd(6-name.length, " ")}${validation[name][0]}${"".padEnd(9-validation[name][0].length, " ")}${validation[name][0] == validation[name][1] ? "<pass>PASSED</pass>" : "<fail>FAILED</fail></div><div class='fail'>        " + validation[name][1]}</div>`);
 	}
 
-	let max = 0;
-	for (let test of benchmarks) {
-		max = Math.max(max, test.total);
-	}
-
-	let tests = [`</validation><benchmarks><h3>Array Size:${info.size}, Iterations:${info.iterations}</h3>`];
+	let tests = [`</validation><benchmarks><h4>Size:${info.size} (${getSize(info.size)}), Iterations:${info.iterations}</h4>`];
 	for (let i = 0; i < benchmarks.length; i++) {
 		let test = benchmarks[i];
 		tests.push(`<test>
-			<bar><fill class="c${i}" style="height:${test.total/max*100}%"></fill></bar>
+			<bar><fill class="c${i}" style="height:${test.total/maxTime*100}%"></fill></bar>
 			<label>${test.name}</label>
-			<time>${getTime(test.total/info.iterations)}</time>
+			<time>${getTime(test.total/info.iterations/info.indexes)}</time>
+			<time>${getTime(test.total)}</time>
 		</test>`);
 	}
 	let post = `</benchmarks></benchmark>`
+	colors[0] += 1;
 	return `${pre}${validations.join('')}${tests.join('')}${post}`;
 }
 
 function benchmark() {
-	let a = new BitArray(4, 8);
-	let b = new BitArray(4, 8);
-	let c = new BitArray(7);
+	let modes = [8, 16, 32];
+	let len = 1024*1024*1;
+	let cycles = 1;
+	let results = [];
+	let maxTime = 0;
+	for (let mode of modes) {
+		let a = new BitArray(4, mode);
+		let b = new BitArray(4, mode);
+		let c = new BitArray(7, mode);
 
-	let aState = false;
-	let bState = true;
-	let cState = false;
-	let aInterval = Math.floor(a.length/2);
-	let bInterval = 1;
-	for (let i = 0; i < c.length; i++) {
-		if (i % aInterval == 0) { aState = !aState; }
-		if (aState) { a.set(i); }
+		let aState = false;
+		let bState = true;
+		let cState = false;
+		let aInterval = Math.floor(a.length/2);
+		let bInterval = 1;
+		for (let i = 0; i < c.length; i++) {
+			if (i % aInterval == 0) { aState = !aState; }
+			if (aState) { a.set(i); }
 
-		if (i == 1 || i == 3) { bState = !bState; }
-		if (bState) { b.set(i); }
+			if (i == 1 || i == 3) { bState = !bState; }
+			if (bState) { b.set(i); }
 
-		if (i % 1 == 0) { cState = !cState; }
-		if (cState) { c.set(i); }
-	}
+			if (i % 1 == 0) { cState = !cState; }
+			if (cState) { c.set(i); }
+		}
 
-	let validation = {
-		a: [a, "1100"],
-		b: [b, "1001"],
-		c: [c, "1010101"],
-		and: [a.and(b, true), "1000"],
-		or:  [a.or(b, true), "1101"],
-		xor: [a.xor(b, true), "0101"],
-		not: [a.not(true), "0011"],
-		"a|c": [a.or(c, true), "1110"],
-		"c|a": [c.or(a, true), "1110101"]
-	};
+		let validation = {
+			a: [a, "1100"],
+			b: [b, "1001"],
+			c: [c, "1010101"],
+			and: [a.and(b, true), "1000"],
+			or:  [a.or(b, true), "1101"],
+			xor: [a.xor(b, true), "0101"],
+			not: [a.not(true), "0011"],
+			"a|c": [a.or(c, true), "1110"],
+			"c|a": [c.or(a, true), "1110101"]
+		};
 
-	
-	
-	let modes = [32, 8, 16, 32];
-	let len = 1024*4;
-	let lastArr = null;
-	let cycles = 1000;
-	for (let size of modes) {
+
 		let benchmarks = [];
-		let bitArr = new BitArray(len, size);
+		let bitArr = new BitArray(len, mode);
 		let copyArr = bitArr.clone();
 		let state = true;
 
 		let start = now();
 		for (let cycle = 0; cycle < cycles; cycle++) {
 			for (let i = 0; i < len; i++) {
-				if (i % size == 0) {
+				if (i % mode == 0) {
 					state != state;
 				}
 
@@ -116,37 +115,35 @@ function benchmark() {
 				
 			}
 		}
-		let end   = now();
-		if (lastArr != null) {
-			benchmarks.push({
-				name: bitArr.byteSize + ".set()",
-				total: end - start
-			});
-		}
-
+		let end = now();
+	
+		benchmarks.push({
+			name: "set",
+			total: end - start
+		});
+		maxTime = Math.max(maxTime, end-start);
+		
 		let ops = ["and", "or", "xor", "not"];
-		if (lastArr != null) {
-			for (let op of ops) {
-				start = now();
-				for (let cycle = 0; cycle < cycles; cycle++) {
-					bitArr[op](lastArr);
-				}
-				end = now();
-				benchmarks.push({
-					name: bitArr.byteSize + "." + op,
-					total:end - start
-				})
+		for (let op of ops) {
+			start = now();
+			for (let cycle = 0; cycle < cycles; cycle++) {
+				bitArr[op](bitArr);
 			}
-
-			document.body.innerHTML += generateHTML({name:"Dynamic: " + size, size:len, iterations:cycles}, validation, benchmarks);
+			end = now();
+			benchmarks.push({
+				name: op,
+				total:end - start
+			})
+			maxTime = Math.max(maxTime, end-start);
 		}
-		lastArr = copyArr;
+
+		results.push([{name:"Dynamic " + mode + "-bit", size:len, iterations:cycles, indexes:bitArr.indexes}, validation, benchmarks]);
 	}
 
-	
-
-
-
+	for (let result of results) {
+		result.push(maxTime);
+		document.body.innerHTML += generateHTML.apply(this, result);
+	}
 	
 
 	// console.log(`b: ${b}`);
@@ -226,11 +223,50 @@ function getTime(mil) {
 			}
 		}
 	} else {
-		const us = mil * 1000;
-		msg = us + "µs";
+		const microsecond = mil * 1000;
+		const nanosecond = microsecond * 1000;
+
+		if (nanosecond < 1000) {
+			return Math.floor(nanosecond) + "ns";
+		}
+
+		if (microsecond < 1000) {
+			return Math.floor(microsecond*1000)/1000 + "µs";
+		}
 	}
 
 	return msg;
+}
+
+function getSize(bits) {
+	let msg = "";
+	let metric = 1024;
+
+	if (bits < 8) {
+		return bits + "b";
+	} else {
+		let bytes = bits / 8;
+		if (bytes < metric) {
+			return bytes + "B";
+		}
+
+		let kb = bytes / metric;
+		if (kb < metric) {
+			return kb + "KB";
+		}
+
+		let mb = kb / metric;
+		if (mb < metric) {
+			return mb + "MB";
+		}
+
+		let gb = mb / metric;
+		if (gb < metric) {
+			return gb + "GB";
+		}
+
+		return (gb / 1024) + "TB";
+	}
 }
 
 loadClass();
