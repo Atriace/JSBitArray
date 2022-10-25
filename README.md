@@ -62,7 +62,7 @@ console.log(`b: ${b}, length: ${b.length}, popcount:${b.popcount}`);
 **Operators**
 ```javascript
 let oAnd = b.and(a, true);
-let oOr = b.or(a, true);
+let oOr  = b.or(a, true);
 let oXor = b.xor(a, true);
 let oNot = b.not(true);
 
