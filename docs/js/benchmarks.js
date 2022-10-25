@@ -35,7 +35,6 @@ function registerClass(className, moduleRef) {
 var colors = [1, "green", "teal", "orange", "red"]
 
 function generateHTML(info, validation, benchmarks, maxTime) {
-	let pre  = `<benchmark class='${colors[colors[0]]}'><h2>${info.name}</h2><validation><h3>Validation:</h3>`;
 	let sep = ":";
 	let validations = [];
 	for (let name in validation) {
@@ -43,8 +42,10 @@ function generateHTML(info, validation, benchmarks, maxTime) {
 	}
 
 	let tests = [`</validation><benchmarks><h4>Size:${info.size} (${getSize(info.size)}), Iterations:${info.iterations}</h4>`];
+	let totalTime = 0;
 	for (let i = 0; i < benchmarks.length; i++) {
 		let test = benchmarks[i];
+		totalTime += test.total;
 		tests.push(`<test>
 			<bar><fill class="c${i}" style="height:${test.total/maxTime*100}%"></fill></bar>
 			<label>${test.name}</label>
@@ -52,14 +53,14 @@ function generateHTML(info, validation, benchmarks, maxTime) {
 			<time>${getTime(test.total)}</time>
 		</test>`);
 	}
-	let post = `</benchmarks></benchmark>`
+	let output = `<benchmark class='${colors[colors[0]]}'><totalTime><div>${getTime(totalTime)}</div></totalTime><h2>${info.name}</h2><validation><h3>Validation:</h3>${validations.join('')}${tests.join('')}</benchmarks></benchmark>`
 	colors[0] += 1;
-	return `${pre}${validations.join('')}${tests.join('')}${post}`;
+	return output;
 }
 
 function benchmark() {
 	let modes = [8, 16, 32];
-	let len = 1024*1024*1;
+	let len = 1024*1024*4;
 	let cycles = 1;
 	let results = [];
 	let maxTime = 0;

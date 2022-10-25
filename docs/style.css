@@ -116,6 +116,21 @@ h4 {
     margin-bottom: 0.75em;
 }
 
+totaltime {
+    float: right;
+    height: 0px;
+    margin: -1em;
+}
+
+totalTime > div {
+    background: #4b4c48;
+    border-bottom-left-radius: 1em;
+    padding: 0.5em 0.75em 0.5em 1.25em;
+    color: #ffffff;
+    font-size: 1.25em;
+    font-weight: 600;
+}
+
 div {
     font-family: "Consolas", sans-serif;
 	white-space: pre;
@@ -158,10 +173,7 @@ label {
 	font-size: 1.0em;
     font-weight: 600;
     padding: 0.25em 0.5em;
-
-    /*background: #eff1f3;*/
-    /*color: #014046;*/
-    background: #1d4d54db;
+    background: #4b4c48;
    	color: white;
     margin-bottom: 0.5em;
 }
