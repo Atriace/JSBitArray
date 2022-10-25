@@ -7,7 +7,7 @@ var classList = [
 ];
 
 function loadClass() {
-	import(`../${classList[0]}.js`).then(module => {
+	import(`./${classList[0]}.js`).then(module => {
 		registerClass(classList[0], module);
 	});
 }
