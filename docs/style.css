@@ -33,6 +33,59 @@ body {
 	padding: 2em;
 }
 
+nav {
+	margin-top: -2em;
+	margin-left: -2em;
+	margin-right: -2em;
+    margin-bottom: 2em;
+    padding: 2em;
+    background: white;
+    height: 47px;
+    display: flex;
+}
+
+nav > * {
+	display: inline-flex;
+}
+
+logo {
+	background-image:  url("./img/JSBitArray_logowide.png");
+	background-repeat: no-repeat;
+    background-size: contain;
+	width: 235px;
+	height: 100%;
+    flex: auto;
+}
+
+nav > a {
+    text-decoration: none;
+    font-family: system-ui, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.025em;
+    font-weight: 600;
+    padding: 0.75em 1em;
+    margin-right: 4px;
+    color: hsl(210deg 14% 36%);
+    background: #ffffff;
+    border: 1px solid #eef0f2;
+}
+
+nav > a:hover {
+	background: #f0db4f;
+    border: 1px solid #ebd01e;
+}
+
+nav > a:active {
+	background: hsl(210deg 14% 86%);
+    border: 1px solid hsl(210deg 14% 79%);
+    color: #323330;
+}
+
+nav svg {
+    margin-top: 2px;
+    margin-right: 0.4em;
+}
+
 h1 {
 	font-family: system-ui, sans-serif;
 	font-size: 3em;
