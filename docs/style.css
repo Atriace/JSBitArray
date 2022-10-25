@@ -30,6 +30,7 @@ title {
 body {
 	background-color: #eff1f3;
 	font-size: 10pt;
+	font-family: system-ui, sans-serif;
 	padding: 2em;
 }
 
@@ -373,4 +374,35 @@ fail {
 
 .purple .c3 {
 	background-color: #7700FF;
+}
+
+
+/* --------------------- ReadMe Styling ---------------------  */
+
+readme {
+	font-size: 12pt;
+	vertical-align: top;
+    background: #f9fafb;
+    max-width: 830px;
+    height: auto;
+    border: 1px solid #d9d9d9;
+    padding: 3em;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2em;
+}
+
+readme p {
+    margin-bottom: 1em;
+}
+
+readme a {
+    display: inline;
+    text-decoration: none;
+    color: #0969da;
+    font-weight: 600;
+}
+
+readme a:hover {
+	text-decoration: underline;
 }
