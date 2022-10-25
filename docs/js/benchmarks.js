@@ -32,13 +32,13 @@ function registerClass(className, moduleRef) {
 	}
 }
 
-var colors = [1, "green", "teal", "orange", "red"]
+var colors = [1, "green", "teal", "orange", "red", "purple", "blue"];
 
 function generateHTML(info, validation, benchmarks, maxTime) {
 	let sep = ":";
 	let validations = [];
 	for (let name in validation) {
-		validations.push(`<div>${name}${sep.padEnd(6-name.length, " ")}${validation[name][0]}${"".padEnd(9-validation[name][0].length, " ")}${validation[name][0] == validation[name][1] ? "<pass>PASSED</pass>" : "<fail>FAILED</fail></div><div class='fail'>        " + validation[name][1]}</div>`);
+		validations.push(`<div>${name}${sep.padEnd(6-name.length, " ")}${validation[name][0]}${"".padEnd(9-validation[name][0].length, " ")}${validation[name][0] == validation[name][1] ? "<pass>PASSED</pass>" : "<fail>FAILED</fail></div><div class='fail'>   !=   " + validation[name][1]}</div>`);
 	}
 
 	let tests = [`</validation><benchmarks><h4>Size:${info.size} (${getSize(info.size)}), Iterations:${info.iterations}</h4>`];
@@ -64,6 +64,8 @@ function benchmark() {
 	let cycles = 1;
 	let results = [];
 	let maxTime = 0;
+
+	// Dynamic
 	for (let mode of modes) {
 		let a = new BitArray(4, mode);
 		let b = new BitArray(4, mode);
@@ -106,14 +108,7 @@ function benchmark() {
 		let start = now();
 		for (let cycle = 0; cycle < cycles; cycle++) {
 			for (let i = 0; i < len; i++) {
-				if (i % mode == 0) {
-					state != state;
-				}
-
-				if (state) {
-					bitArr.set(i, state);
-				}
-				
+				bitArr.set(i);
 			}
 		}
 		let end = now();
@@ -141,64 +136,84 @@ function benchmark() {
 		results.push([{name:"Dynamic " + mode + "-bit", size:len, iterations:cycles, indexes:bitArr.indexes}, validation, benchmarks]);
 	}
 
-	for (let result of results) {
-		result.push(maxTime);
-		document.body.innerHTML += generateHTML.apply(this, result);
-	}
-	
+	// Static
+	let staticClasses = [window["BitArray8"], window["BitArray16"]]
+	for (let kind of staticClasses) {
+		let a = new kind(4);
+		let b = new kind(4);
+		let c = new kind(7);
 
-	// console.log(`b: ${b}`);
-	// console.log(`c: ${c}`);
-	// console.log(`and: ${c.and(b, true)}`);
-	// console.log(`an2: ${b.and(c, true)}`);
+		let aState = false;
+		let bState = true;
+		let cState = false;
+		let aInterval = Math.floor(a.length/2);
+		let bInterval = 1;
+		for (let i = 0; i < c.length; i++) {
+			if (i % aInterval == 0) { aState = !aState; }
+			if (aState) { a.set(i); }
 
-	// for (let i = 0; i < b.length; i++) {
-	// 	console.log(oAnd.at(i));
-	// }
+			if (i == 1 || i == 3) { bState = !bState; }
+			if (bState) { b.set(i); }
 
+			if (i % 1 == 0) { cState = !cState; }
+			if (cState) { c.set(i); }
+		}
 
-	// Benchamarks
-	/*let modes = [32, 8, 16, 32];
-	let len = 10240;
-	let lastArr = null;
-	let cycles = 10;
-	for (let size of modes) {
-		let bitArr = new BitArray(len, size);
+		let validation = {
+			a: [a, "1100"],
+			b: [b, "1001"],
+			c: [c, "1010101"],
+			and: [a.and(b, true), "1000"],
+			or:  [a.or(b, true), "1101"],
+			xor: [a.xor(b, true), "0101"],
+			not: [a.not(true), "0011"],
+			"a|c": [a.or(c, true), "1110"],
+			"c|a": [c.or(a, true), "1110101"]
+		};
+
+		let benchmarks = [];
+		let bitArr = new kind(len);
 		let copyArr = bitArr.clone();
 		let state = true;
 
 		let start = now();
 		for (let cycle = 0; cycle < cycles; cycle++) {
 			for (let i = 0; i < len; i++) {
-				if (i % size == 0) {
-					state != state;
-				}
-
-				if (state) {
-					bitArr.set(i, state);
-				}
-				
+				bitArr.set(i);
 			}
 		}
-		let end   = now();
-		if (lastArr != null) {
-			console.log(`${bitArr.byteSize} Assign: ${getTime(end - start)}`);
-		}
-
-
-		if (lastArr != null) {
+		let end = now();
+	
+		benchmarks.push({
+			name: "set",
+			total: end - start
+		});
+		maxTime = Math.max(maxTime, end-start);
+		
+		let ops = ["and", "or", "xor", "not"];
+		for (let op of ops) {
 			start = now();
 			for (let cycle = 0; cycle < cycles; cycle++) {
-				bitArr.and(lastArr);
-				bitArr.or(lastArr);
-				bitArr.xor(lastArr);
-				bitArr.not();
+				bitArr[op](bitArr);
 			}
-			end   = now();
-			console.log(`${bitArr.byteSize} Ops: ${getTime(end - start)}`);
+			end = now();
+			benchmarks.push({
+				name: op,
+				total:end - start
+			})
+			maxTime = Math.max(maxTime, end-start);
 		}
-		lastArr = copyArr;
-	}*/
+
+		results.push([{name:kind.name, size:len, iterations:cycles, indexes:bitArr.indexes}, validation, benchmarks]);
+	}
+
+	document.getElementById("loadWarning").remove();
+
+	// Generate HTML
+	for (let result of results) {
+		result.push(maxTime);
+		document.body.innerHTML += generateHTML.apply(this, result);
+	}
 }
 
 function now() {

@@ -40,7 +40,7 @@ nav {
     margin-bottom: 2em;
     padding: 2em;
     background: white;
-    height: 47px;
+    height: 42px;
     display: flex;
 }
 
@@ -84,6 +84,14 @@ nav > a:active {
 nav svg {
     margin-top: 2px;
     margin-right: 0.4em;
+}
+
+#loadWarning {
+    font-family: "Consolas", sans-serif;
+    font-size: 1.2em;
+    background: #4b4c48;
+    color: white;
+    padding: 2em;
 }
 
 h1 {
@@ -137,9 +145,8 @@ div {
 }
 
 benchmarks {
-	display: inline-block;
-    height: 85%;
-    margin-right: 0.5em;
+	display: block;
+    height: 250px;
     vertical-align: top;
 }
 
@@ -148,10 +155,11 @@ benchmark {
 	vertical-align: top;
 	background: #f9fafb;
 	width: auto;
-	height: 340px;
+	height: auto;
+    min-height: 350px;
 	border: 1px solid #d9d9d9;
 	padding: 1em;
-	margin: 0.5em;
+    margin: 0px 0.5em 0.5em 0px;
 }
 
 validation {
@@ -321,4 +329,48 @@ fail {
 
 .red .c3 {
 	background-color: #FF4041;
+}
+
+/* Blues  */
+
+.blue .c0 {
+	background-color: #01508E;
+}
+
+.blue .c1 {
+	background-color: #0274CC;
+}
+
+.blue .c2 {
+	background-color: #027CD9;
+}
+
+.blue .c3 {
+	background-color: #0283E6;
+}
+
+.blue .c3 {
+	background-color: #0392FF;
+}
+
+/* Purples  */
+
+.purple .c0 {
+	background-color: #43008F;
+}
+
+.purple .c1 {
+	background-color: #5F00CC;
+}
+
+.purple .c2 {
+	background-color: #6500D9;
+}
+
+.purple .c3 {
+	background-color: #6B00E6;
+}
+
+.purple .c3 {
+	background-color: #7700FF;
 }
